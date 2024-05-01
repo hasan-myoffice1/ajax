@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>A J A X </title>
+</head>
+<body>
+
+     <div class="section">
+        <h1>The XMLHttpRequest Object</h1>
+        <div id="demo">
+            <p>let AJAX change this text.</p>
+            <button type="button" onclick="loadDoc()"> Change content</button>
+        </div>
+        <p id="demo2"></p>
+        <button type="button" onclick="loadDoc1()"> Change content</button>
+        <p id="demo3"></p>
+        <button type="button" onclick="loadDoc2()"> Change content</button>
+    
+     </div>
+    <!-- ------------------------------- show suggestion -->
+      <div class="section"> 
+        <p>suggestion:<span id="txtHint"></span></p>
+        <input type="text" onkeyup="showHint(this.value)">
+      </div>
+    <!-- ------------------------------- show suggestion -->
+
+    <div class="section">
+        <form action="">
+            <select name="customers" onchange="showCustomer(this.value)">
+                <option value="">select a customer</option>
+                <option value="Hasan">Hasan </option>
+                <option value="arman">Arman</option>
+                <option value="saimun">Saimun</option>
+            </select>
+         </form>
+         <div id="text_hint">customer info will be listed here .....</div>
+    </div>
+    <script>
+       /*
+         1. Create an XMLHtpRequest object
+         2. Define a callback function
+         3. Open the  XMLHttpRequest object 
+         4. send a  request to a sever
+         
+         create, define, open, send
+         
+         1.create an XMLHttpRequest object 
+         const xhttp = new  XMLHttpRequest();
+         
+         2. Define a callback object
+         xhttp.onload = function() {
+             
+        }
+        
+        3. Open the XMLHttpRequest object
+        xhttp.open("GET", 'url');
+        
+        
+        4. Send a request to a server
+        xhttp.send();
+        
+        */
+
+    function loadDoc(){
+        const xh = new XMLHttpRequest();
+        xh.onload = function() {
+            document.getElementById('demo').innerHTML = this.responseText;
+        }
+        xh.open('GET', './demo/index.php');
+        xh.send();
+       console.log(xh);
+    }
+
+
+    function loadDoc1(){
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200){
+                document.getElementById('demo2').innerHTML = 
+                this.responseText;
+            }
+        };
+        xhttp.open("GET", "./demo/index.php");
+        xhttp.send();
+    }
+
+    function loadDoc2() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            document.getElementById('demo3').innerHTML = "<pre>" +
+            this.getAllResponseHeaders() + "</pre>" ;
+            console.log(this.getResponseHeader('date'));
+        }
+        xhttp.open("GET", "./demo/index.php");
+        xhttp.send();
+
+    }
+
+   // ---------------------------------------------------- show suggestion
+   function showHint(str){
+       if(str.length == 0){
+           document.getElementById('txtHint').innerHTML = "";
+           return;
+        } else {
+            const xmlhttp = new XMLHttpRequest();
+            xmlhttp.onload = function(){
+                document.getElementById('txtHint').innerHTML = this.responseText;
+            }
+            xmlhttp.open("GET", "./demo/demo.php?q=" + str);
+            xmlhttp.send();
+        }
+    }
+    // ---------------------------------------------------- show suggestion
+    //---------------------------------------------------- from
+
+    function showCustomer(str){
+        if(str == ''){
+            document.getElementById('text_hint').innerHTML = "";
+            return;
+        } 
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function(){
+            document.getElementById("text_hint").innerHTML = this.responseText;
+        }
+        xhttp.open("GET","form.php?q=" + str);
+        xhttp.send();
+    }
+
+    //---------------------------------------------------- from
+
+
+ </script> 
+
+  
+    
+</body>
+</html>
